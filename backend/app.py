@@ -23,16 +23,17 @@ def send_email():
 
         data = request.get_json()
         name = data.get('name')
+        number = data.get('number')
         email = data.get('email')
         message = data.get('message')
 
         # Ensure all fields are filled
-        if not name or not email or not message:
+        if not name or not number or not email or not message:
             print("Missing form data")
             return jsonify({'error': 'All form fields are required.'}), 400
 
         # Log form data to see what is being received
-        print(f"Name: {name}, Email: {email}, Message: {message}")
+        print(f"Name: {name},Number: {number} Email: {email}, Message: {message}")
 
         # Create the email
         msg = MIMEMultipart()
@@ -41,7 +42,7 @@ def send_email():
         msg['Subject'] = f"New Contact Form Submission from {name}"
 
         # Email body
-        body = f"Name: {name}\nEmail: {email}\nMessage: {message}"
+        body = f"Name: {name}\nNumber: {number}\nEmail: {email}\nMessage: {message}"
         msg.attach(MIMEText(body, 'plain'))
 
         # Send the email
