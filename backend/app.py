@@ -3,9 +3,12 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
-CORS(app)  # Allows cross-origin requests from your React app
+
+# Enable CORS for cross-origin requests
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Email configuration
 SMTP_SERVER = 'smtp.gmail.com'
@@ -14,9 +17,11 @@ EMAIL_USERNAME = 'rokon.raz@gmail.com'  # Replace with your Gmail address
 EMAIL_PASSWORD = 'xuqemoxazitnfcon'  # Replace with your app-specific password
 
 
-
-@app.route('/send-email', methods=['POST'])
+@app.route('/send-email', methods=['POST', 'OPTIONS'])  # Ensure POST is allowed
 def send_email():
+    if request.method == 'OPTIONS':
+        return jsonify({'message': 'CORS Preflight OK'}), 200
+    
     try:
         # Log the incoming request
         print("Request received:", request.get_json())
